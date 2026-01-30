@@ -14,15 +14,15 @@ class Database
 
             $dsn = sprintf(
                 'mysql:host=%s;dbname=%s;charset=%s',
-                $GLOBALS['database_host'],
-                $GLOBALS['database_name'],
-                $GLOBALS['database_charset']
+                DATABASE_HOST,
+                DATABASE_NAME,
+                DATABASE_CHARSET
             );
 
             self::$instance = new PDO(
                 $dsn,
-                $GLOBALS['database_user'],
-                $GLOBALS['database_password'],
+                DATABASE_USER,
+                DATABASE_PASSWORD,
                 [
                     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
