@@ -1,0 +1,4 @@
+Register
+<?php
+
+$form->render();

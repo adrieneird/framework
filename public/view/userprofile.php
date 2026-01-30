@@ -1,0 +1,4 @@
+Profile
+<?php
+
+$form->render();
