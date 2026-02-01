@@ -9,7 +9,7 @@
 ## Architecture / Workflow
 
 - Index calls router
-- Router instanciate controller class and execute it's action method
+- Router checks controller class and execute it's static action method
 - Controller class might verify auth, might create a form object, might create a model object or call a model static method
 - Form class loads data from request (if posted), validate data, process validated data, renders form
 - Model is both form's DTO and active record
@@ -17,6 +17,7 @@
 
 ## Design choices
 - Static methods, FUCK YEAH
+- If a class doesn't have multiple instances, doesn't have attributes, is stateless, it doesn't need to be instanciated
 - No .env (globals.php works fine)
 - No Auth/RBAC (Controllers manage access)
 - No DTO (Models are DTO)
