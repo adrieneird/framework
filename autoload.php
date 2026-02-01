@@ -16,5 +16,5 @@ spl_autoload_register(function ($class) {
         }
     }
 
-     die("Class not found : $class");
+    //die("Class not found : $class");
 });
