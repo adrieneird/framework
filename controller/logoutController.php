@@ -1,6 +1,6 @@
 <?php
 
-class LoginController extends Controller
+class LogoutController extends Controller
 {
     public static function logoutAction()
     {
