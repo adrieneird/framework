@@ -16,13 +16,13 @@ class DbInstall
         }
 
         usort($models, fn($a, $b) =>
-            $a::install_order() <=> $b::install_order()
+            $a::installOrder() <=> $b::installOrder()
         );
 
         $db = Database::getInstance();
 
         foreach ($models as $model) {
-            $db->exec($model::create_table_sql());
+            $db->exec($model::createTableSql());
         }
 
         foreach ($models as $model) {
@@ -45,7 +45,7 @@ class DbInstall
         }
 
         usort($models, fn($a, $b) =>
-            $b::install_order() <=> $a::install_order()
+            $b::installOrder() <=> $a::installOrder()
         );
 
         $db = Database::getInstance();

@@ -75,6 +75,6 @@ abstract class Model
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) return null;
-        return static::from_array($data);
+        return static::fromArray($data);
     }
 }
