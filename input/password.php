@@ -3,5 +3,5 @@
     type="password"
     name="<?= $name ?>"
     id="<?= $name ?>"
-    value="<?= htmlspecialchars($value ?? '') ?>"
+    autocomplete="current-password"
 >

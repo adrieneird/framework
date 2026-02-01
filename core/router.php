@@ -12,13 +12,16 @@ class Router
 
         if (!class_exists($controllerClass)) {
             Response::redirect("index", 404);
-            //echo 'Controller not found';
+            return;
+        }
+
+        if (!is_subclass_of($controllerClass, Controller::class)) {
+            http_response_code(403);
             return;
         }
 
         if (!method_exists($controllerClass, $actionFunction)) {
             Response::redirect("index", 404);
-            //echo 'Action '.$actionFunction.' not found';
             return;
         }
 

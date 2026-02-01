@@ -1,9 +1,11 @@
 <?php
 
-class LoginController
+class LoginController extends Controller
 {
     public static function formAction()
     {
+        self::requireGuest();
+
 		$form = new UserLogin();
 		
 		if (Request::isPost()) {

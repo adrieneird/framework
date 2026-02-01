@@ -1,9 +1,11 @@
 <?php
 
-class RegisterController
+class RegisterController extends Controller
 {
     public static function formAction()
     {
+        self::requireGuest();
+
 		$form = new UserRegister();
 		
 		if (Request::isPost()) {

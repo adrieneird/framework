@@ -9,7 +9,7 @@ class User extends Model
     public string $password_hash = '';
     public string $created_at;
 
-    public static function create_table_sql(): string
+    public static function createTableSql(): string
     {
 		$table = static::class;
         return "
@@ -22,12 +22,12 @@ class User extends Model
         ";
     }
 
-    public static function fk_sql(): array
+    public static function fkSql(): array
     {
         return [];
     }
 	
-	public static function find_by_email(string $email): ?User
+	public static function findByEmail(string $email): ?User
     {
         $db = Database::getInstance();
         $table = static::class;
@@ -35,7 +35,7 @@ class User extends Model
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 		if (!$data) return null;
-        return static::from_array($data);
+        return static::fromArray($data);
     }
 	
 	private function hashPassword(): void
@@ -58,11 +58,13 @@ class User extends Model
 	
 	public function login(): ?self
     {
-        $user = self::find_by_email($this->email);
+        $user = self::findByEmail($this->email);
         if (!$user) return null;
         if (!password_verify($this->password, $user->password_hash)) return null;
 
+        session_regenerate_id(true);
         $_SESSION['user_id'] = $user->id;
+        
         return $user;
     }
 
@@ -83,7 +85,7 @@ class User extends Model
 
     public static function current(): ?self
     {
-        return self::check() ? self::find_by_id($_SESSION['user_id']) : null;
+        return self::check() ? self::findById($_SESSION['user_id']) : null;
     }
 	
 	public function update(): ?self

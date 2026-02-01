@@ -1,9 +1,11 @@
 <?php
 
-class ProfileController
+class ProfileController extends Controller
 {
     public static function formAction()
     {
+        self::requireAuth();
+
 		$form = new UserProfile();
 		
 		if (Request::isPost()) {

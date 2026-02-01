@@ -4,19 +4,19 @@ abstract class Model
 {
     public const INSTALL_ORDER = 0;
 
-    abstract public static function create_table_sql(): string;
-    abstract public static function fk_sql(): array;
+    abstract public static function createTableSql(): string;
+    abstract public static function fkSql(): array;
 
 	public ?int $id = null;
 
     // Install order
-    public static function install_order(): int
+    public static function installOrder(): int
     {
         return static::INSTALL_ORDER;
     }
     
     // Hydrate
-    public static function from_array(array $data)
+    public static function fromArray(array $data)
     {
         $obj = new static();
         foreach ($data as $key => $value) {
@@ -67,7 +67,7 @@ abstract class Model
 		}
 	}
 
-    public static function find_by_id(int $id): ?self
+    public static function findById(int $id): ?self
     {
         $db = Database::getInstance();
         $table = static::class;
