@@ -18,7 +18,7 @@
 ## Design choices
 - Static methods, FUCK YEAH
 - If a class doesn't have multiple instances, doesn't have attributes, is stateless, it doesn't need to be instanciated
-- No .env (globals.php works fine)
+- No .env (config.php works fine)
 - No Auth/RBAC (Controllers manage access)
 - No DTO (Models are DTO)
 - No interfaces (solo dev)
@@ -29,5 +29,5 @@
 - Simple is stupid, yet elegant
 
 ## Setup
-- Configure globals.php
+- Configure config.php
 - Launch install.php on your server
