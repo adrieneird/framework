@@ -26,7 +26,7 @@ class DbInstall
         }
 
         foreach ($models as $model) {
-            foreach ($model::fk_sql() as $sql) {
+            foreach ($model::fkSql() as $sql) {
                 $db->exec($sql);
             }
         }
