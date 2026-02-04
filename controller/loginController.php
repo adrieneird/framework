@@ -9,13 +9,6 @@ class LoginController extends Controller
 		$form = new UserLogin();
 		
 		if (Request::isPost()) {
-			if ($form->validate()) {
-                $user = $form->process();
-                if ($user) {
-                    Response::redirect('profile', 'form');
-                }
-            }
-
             try {
                 if ($form->validate()) {
                     $user = $form->process();
