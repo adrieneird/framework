@@ -1,4 +1,2 @@
 Login
-<?php
-
-$form->render();
+<?= $form->render() ?>

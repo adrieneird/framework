@@ -23,8 +23,11 @@
 - No DTO (Models are DTO)
 - No interfaces (solo dev)
 - DB singleton
+- Form have inputs
 - Form manages CSRF
-- Form manages validation
+- Form manages validation (through inputs)
+- Form Create/Update Data flow : POST > form inputs > form DTO > DB (Model save)
+- Form Read Data flow : DB (Model find) > form DTO > form inputs
 - No tests
 - Simple is stupid, yet elegant
 

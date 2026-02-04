@@ -1,4 +1,2 @@
 Profile
-<?php
-
-$form->render();
+<?= $form->render() ?>

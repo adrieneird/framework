@@ -9,10 +9,11 @@ class RegisterController extends Controller
 		$form = new UserRegister();
 		
 		if (Request::isPost()) {
-			$form->validate();
-			$user = $form->process();
-			if ($user) {
-				Response::redirect('login', 'form');
+			if ($form->validate()) {
+                $user = $form->process();
+                if ($user) {
+                    Response::redirect('login', 'form');
+                }
 			}
 		}
 		

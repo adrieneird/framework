@@ -3,11 +3,11 @@
 class UserRegister extends Form
 {
 	public function __construct() {
-		$this->class = User::class;
+		$this->setClass(User::class);
 		$this->fields = [
-			'email' => 'email',
-			'password' => 'password',
-			'submit' => 'submit',
+			'email' => (new Input('email', 'email'))->required()->email()->max(255),
+			'password' =>  (new Input('password', 'password'))->required()->min(1)->max(255),
+			'submit' => (new Input('submit', 'submit')),
 		];
 	}
 	

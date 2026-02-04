@@ -1,4 +1,2 @@
 Register
-<?php
-
-$form->render();
+<?= $form->render() ?>

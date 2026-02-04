@@ -9,13 +9,14 @@ class ProfileController extends Controller
 		$form = new UserProfile();
 		
 		if (Request::isPost()) {
-			$form->validate();
-			$user = $form->process();
-			if ($user) {
-				Response::redirect('profile', 'form');
+			if ($form->validate()) {
+                $user = $form->process();
+                if ($user) {
+                    Response::redirect('profile', 'form');
+                }
 			}
 		} else {
-			$form->load();
+			$form->loadDto(User::current());
 		}
 		
 		Response::render("userprofile", ["form" => $form]);

@@ -2,10 +2,20 @@
 
 abstract class Form
 {
-	public $class;
-	public $dto;
-    public $fields = [];
+	private string $class;
+	protected ?Model $dto =  null;
+    protected array $fields = [];
 	
+    protected function setClass(string $class): void
+    {
+        if (!is_subclass_of($class, Model::class)) {
+            throw new RuntimeException("Form class must be a Model subclass, got: $class");
+        }
+        $this->class = $class;
+    }
+
+    // CSRF
+    
 	protected static function getCsrf(): string
     {
         if (empty($_SESSION['_csrf'])) {
@@ -26,46 +36,90 @@ abstract class Form
         unset($_SESSION['_csrf']);
     }
 	
-	public function render(): void
-    {
-		echo '<form method="POST" action="">';
-        foreach ($this->fields as $name => $type) {
-            $value = $this->dto->$name ?? null;
-
-            $file = BASE_PATH . '/input/' . $type . '.php';
-
-            if (!file_exists($file)) {
-                throw new Exception("Input type '$type' - '$file' not found");
-            }
-
-            include $file;
+    // Data: Dto, Input, Post
+	
+    public function createDto(): void {
+        if (!isset($this->class)) {
+            throw new RuntimeException("Form class not found");
+		}
+        if (!is_subclass_of($this->class, Model::class)) {
+            throw new RuntimeException("Form class must be a Model subclass, got: " . $this->class);
         }
-		echo '<input type="hidden" name="_csrf" value="' . htmlspecialchars(self::getCsrf()) . '">';
-		echo '</form>';
+        $this->dto = new $this->class;
+    }
+
+	public function loadDto(Model $dto): void {
+        if (isset($this->class) && !($dto instanceof $this->class)) {
+            throw new RuntimeException("DTO must be instance of {$this->class}");
+        }
+        $this->dto = $dto;
+        $this->dtoToInput();
+	}
+
+    protected function dtoToInput(): void {
+        if (!$this->dto) {
+            $this->createDto();
+        }
+        foreach ($this->fields as $name => $input) {
+            if (property_exists($this->dto, $name)) {
+                $input->value = $this->dto->$name;
+            }
+        }
+    }
+
+    protected function inputToDto(): void {
+        if (!$this->dto) {
+            $this->createDto();
+        }
+        foreach ($this->fields as $name => $input) {
+            if (property_exists($this->dto, $name)) {
+                $this->dto->$name = $input->value;
+            }
+        }
+    }
+
+    protected function postToInput(): void {
+        foreach ($this->fields as $name => $input) {
+            $input->value = Request::post($name);
+        }
+    }
+
+    // Actions
+
+	public function render(): string
+    {
+        $html = '';
+		$html .= '<form method="POST" action="">';
+        foreach ($this->fields as $name => $input) {
+            $html .= $input->render();
+        }
+		$html .= '<input type="hidden" name="_csrf" value="' . htmlspecialchars(self::getCsrf()) . '">';
+		$html .= '</form>';
+
+        return $html;
     }
 	
-	public function validate() {
+	public function validate(): bool {
 		if (!$this->validateCsrf()) {
 			throw new RuntimeException('CSRF invalide');
 		}
 		$this->consumeCsrf();
 		
-		if (isset($this->class)) {
-			$this->dto = new $this->class;
+		$this->createDto();
+        $this->postToInput();
 			
-			foreach ($this->fields as $name => $type) {
-				if (property_exists($this->dto, $name)) {
-					$this->dto->$name = Request::post($name);
-				}
-			}
-		}		
+        $valid = true;
+        foreach ($this->fields as $name => $input) {
+            if (!$input->validate()) {
+                $valid = false;
+            }
+        }
+
+        if ($valid) {
+            $this->inputToDto();
+        }
+        return $valid;
 	}
-	
-	public function load() {
-		if (isset($this->class)) {
-			$this->dto = new $this->class;
-		}
-	}
-	
-	abstract public function process();
+
+    abstract public function process();
 }
