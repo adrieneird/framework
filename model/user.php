@@ -51,7 +51,9 @@ class User extends Model
 		if (!empty($this->password)) {
 			$this->hashPassword();
 			
-			$this->save(['email', 'password_hash']);
+			if ($this->save(['email', 'password_hash'])) {
+                return $this;
+            }
 		}
 		return null;
 	}

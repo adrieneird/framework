@@ -5,6 +5,9 @@ abstract class Form
 	private string $class;
 	protected ?Model $dto =  null;
     protected array $fields = [];
+    protected ?string $rateLimitKey = null;
+    protected int $rateLimitAttempts = 3;
+    protected int $rateLimitMinutes = 15;
 	
     protected function setClass(string $class): void
     {
@@ -12,6 +15,64 @@ abstract class Form
             throw new RuntimeException("Form class must be a Model subclass, got: $class");
         }
         $this->class = $class;
+    }
+
+    // Rate limit
+
+    protected function checkRateLimit(): bool
+    {
+        if ($this->rateLimitKey === null) {
+            return true; // No rate limiting for this form
+        }
+        
+        $identifier = Request::post($this->rateLimitKey, '');
+        $key = 'rate_limit_' . static::class . '_' . md5($identifier);
+        
+        if (!isset($_SESSION[$key])) {
+            $_SESSION[$key] = [
+                'attempts' => 0,
+                'reset_at' => time() + ($this->rateLimitMinutes * 60)
+            ];
+        }
+        
+        $data = $_SESSION[$key];
+        
+        // Check if lockout expired
+        if (time() >= $data['reset_at']) {
+            $_SESSION[$key] = [
+                'attempts' => 0,
+                'reset_at' => time() + ($this->rateLimitMinutes * 60)
+            ];
+            return true;
+        }
+        
+        // Check if too many attempts
+        return $data['attempts'] < $this->rateLimitAttempts;
+    }
+
+    protected function hitRateLimit(): void
+    {
+        if ($this->rateLimitKey === null) {
+            return;
+        }
+        
+        $identifier = Request::post($this->rateLimitKey, '');
+        $key = 'rate_limit_' . static::class . '_' . md5($identifier);
+        
+        if (isset($_SESSION[$key])) {
+            $_SESSION[$key]['attempts']++;
+        }
+    }
+
+    protected function clearRateLimit(): void
+    {
+        if ($this->rateLimitKey === null) {
+            return;
+        }
+        
+        $identifier = Request::post($this->rateLimitKey, '');
+        $key = 'rate_limit_' . static::class . '_' . md5($identifier);
+        unset($_SESSION[$key]);
     }
 
     // CSRF
@@ -100,8 +161,12 @@ abstract class Form
     }
 	
 	public function validate(): bool {
+        if (!$this->checkRateLimit()) {
+            throw new RuntimeException('Too many attempts. Please try again in ' . $this->rateLimitMinutes . ' minutes.');
+        }
+
 		if (!$this->validateCsrf()) {
-			throw new RuntimeException('CSRF invalide');
+			throw new RuntimeException('invalid CSRF');
 		}
 		$this->consumeCsrf();
 		

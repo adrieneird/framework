@@ -63,7 +63,11 @@ abstract class Model
 				return false;
 			}
 		} catch (\PDOException $e) {
-			return false;
+			Logger::error('Database error in save()', [
+                'class' => static::class,
+                'message' => $e->getMessage()
+            ]);
+            return false;
 		}
 	}
 
