@@ -37,9 +37,23 @@ class Input
             throw new RuntimeException("Input type '$this->type' - '$file' not found");
         }
 
+        $html = !$this->errors ? '<div class="form-field">' : '<div class="form-field has-error">';
+
         ob_start();
         include $file;
-        return ob_get_clean();
+        $html .= ob_get_clean();
+
+        if (!empty($this->errors)) {
+            $html .= '<ul class="input-errors">';
+            foreach ($this->errors as $error) {
+                $html .= '<li>'.htmlspecialchars($error).'</li>';
+            }
+            $html .= '</ul>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
     }
 
     // RULES
@@ -58,7 +72,11 @@ class Input
 
     public function min(int $length): self
     {
-        $this->rules['min'] = fn($v) => strlen($v) >= $length ? true : "Minimum $length characters required";
+        $this->rules['min'] = fn($v) =>
+        ($v === null || $v === '') // truthy if empty
+            ? true
+            : (strlen($v) >= $length ? true : "Minimum $length characters required");
+
         return $this;
     }
 

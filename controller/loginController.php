@@ -17,12 +17,13 @@ class LoginController extends Controller
                         Response::redirect('profile', 'form');
                     } else {
                         $form->hitRateLimit();
+                        throw new RuntimeException('Wrong login or password.');
                     }
                 }
             } catch (RuntimeException $e) {
+                $form->addFormError($e->getMessage());
                 Response::render("userlogin", [
-                    "form" => $form,
-                    "error" => $e->getMessage()
+                    "form" => $form
                 ]);
                 return;
             }

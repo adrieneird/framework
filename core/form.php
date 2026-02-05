@@ -5,6 +5,7 @@ abstract class Form
 	private string $class;
 	protected ?Model $dto =  null;
     protected array $fields = [];
+    protected array $formErrors = [];
     protected ?string $rateLimitKey = null;
     protected int $rateLimitAttempts = 3;
     protected int $rateLimitMinutes = 15;
@@ -150,6 +151,15 @@ abstract class Form
 	public function render(): string
     {
         $html = '';
+
+        if (!empty($this->formErrors)) {
+            $html .= '<div class="form-errors"><ul>';
+            foreach ($this->formErrors as $error) {
+                $html .= '<li>' . htmlspecialchars($error) . '</li>';
+            }
+            $html .= '</ul></div>';
+        }
+
 		$html .= '<form method="POST" action="">';
         foreach ($this->fields as $name => $input) {
             $html .= $input->render();
@@ -196,4 +206,11 @@ abstract class Form
     }
 
     abstract public function process();
+
+    // Errors
+
+    public function addFormError(string $message): void
+    {
+        $this->formErrors[] = $message;
+    }
 }

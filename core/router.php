@@ -4,8 +4,8 @@ class Router
 {
     public static function route(): void
     {
-        $controller = $_GET['page'] ?? 'index';
-        $action = $_GET['action'] ?? 'index';
+        $controller = Request::query('page', 'index');
+        $action = Request::query('action', 'index');
 
         $controllerClass = ucfirst($controller) . 'Controller';
         $actionFunction = ucfirst($action) . 'Action';

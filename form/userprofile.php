@@ -5,8 +5,8 @@ class UserProfile extends Form
 	public function __construct() {
 		$this->setClass(User::class);
 		$this->fields = [
-			'email' => (new Input('email', 'email'))->required()->email()->max(255),
-			'password' =>  (new Input('password', 'password'))->required()->min(8)->max(255),
+			'email' => (new Input('email', 'email'))->email()->max(255),
+			'password' =>  (new Input('password', 'password'))->min(8)->max(255),
 			'submit' => (new Input('submit', 'submit')),
 		];
 	}

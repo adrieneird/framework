@@ -16,7 +16,7 @@ abstract class Model
     }
     
     // Hydrate
-    public static function fromArray(array $data)
+    public static function fromArray(array $data): static
     {
         $obj = new static();
         foreach ($data as $key => $value) {
@@ -78,7 +78,9 @@ abstract class Model
         $stmt = $db->prepare("SELECT * FROM $table WHERE id = :id LIMIT 1");
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$data) return null;
+        if (!$data) {
+            return null;
+        }
         return static::fromArray($data);
     }
 }

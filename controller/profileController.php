@@ -7,6 +7,7 @@ class ProfileController extends Controller
         self::requireAuth();
 
 		$form = new UserProfile();
+        $user = User::current();
 		
 		if (Request::isPost()) {
 			if ($form->validate()) {
@@ -16,9 +17,9 @@ class ProfileController extends Controller
                 }
 			}
 		} else {
-			$form->loadDto(User::current());
+			$form->loadDto($user);
 		}
 		
-		Response::render("userprofile", ["form" => $form]);
+		Response::render("userprofile", ["form" => $form, "username" => $user->email]);
     }
 }

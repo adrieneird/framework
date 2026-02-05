@@ -34,7 +34,9 @@ class User extends Model
 		$stmt = $db->prepare("SELECT * FROM $table WHERE email = :email LIMIT 1");
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-		if (!$data) return null;
+		if (!$data) {
+            return null;
+        }
         return static::fromArray($data);
     }
 	
