@@ -1,7 +1,7 @@
-<label for="<?= $name ?>"><?= ucfirst($name) ?></label>
+<label for="<?= Response::format($name) ?>"><?= ucfirst(Response::format($name)) ?></label>
 <input
     type="password"
-    name="<?= $name ?>"
-    id="<?= $name ?>"
+    name="<?= Response::format($name) ?>"
+    id="<?= Response::format($name) ?>"
     autocomplete="current-password"
 >

@@ -16,5 +16,7 @@ spl_autoload_register(function ($class) {
         }
     }
 
-    //die("Class not found : $class");
+    Logger::error('Class not found', [
+        'class' => $class
+    ]);
 });

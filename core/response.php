@@ -2,6 +2,14 @@
 
 class Response
 {
+    public static function format(mixed $data): string
+    {
+        if ($data) {
+            return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        }
+        return '';
+    }
+
 	 public static function render(string $view, array $data = []): void
 	{
 		extract($data);

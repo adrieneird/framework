@@ -1,7 +1,7 @@
-<label for="<?= $name ?>"><?= ucfirst($name) ?></label>
+<label for="<?= Response::format($name) ?>"><?= ucfirst(Response::format($name)) ?></label>
 <input
     type="email"
-    name="<?= $name ?>"
-    id="<?= $name ?>"
-    value="<?= htmlspecialchars($value ?? '') ?>"
+    name="<?= Response::format($name) ?>"
+    id="<?= Response::format($name) ?>"
+    value="<?= Response::format($value) ?>"
 >

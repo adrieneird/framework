@@ -1,6 +1,6 @@
 <input
     type="submit"
-    name="<?= $name ?>"
-    id="<?= $name ?>"
-    value="<?= ucfirst($name) ?>"
+    name="<?= Response::format($name) ?>"
+    id="<?= Response::format($name) ?>"
+    value="<?= ucfirst(Response::format($name)) ?>"
 >

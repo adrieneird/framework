@@ -11,17 +11,17 @@ class Router
         $actionFunction = ucfirst($action) . 'Action';
 
         if (!class_exists($controllerClass)) {
-            Response::redirect("index", 404);
+            Response::redirectUrl("index.php", 404);
             return;
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
-            http_response_code(403);
+            Response::redirectUrl("index.php", 403);
             return;
         }
 
         if (!method_exists($controllerClass, $actionFunction)) {
-            Response::redirect("index", 404);
+            Response::redirectUrl("index.php", 404);
             return;
         }
 
