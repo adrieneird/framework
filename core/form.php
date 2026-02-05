@@ -64,7 +64,7 @@ abstract class Form
         }
     }
 
-    protected function clearRateLimit(): void
+    public function clearRateLimit(): void
     {
         if ($this->rateLimitKey === null) {
             return;
@@ -180,11 +180,20 @@ abstract class Form
             }
         }
 
+        if (!$this->validateForm()) {
+            $valid = false;
+        }
+
         if ($valid) {
             $this->inputToDto();
         }
         return $valid;
 	}
+
+    protected function validateForm(): bool
+    {
+        return true;
+    }
 
     abstract public function process();
 }

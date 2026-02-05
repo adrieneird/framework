@@ -34,7 +34,7 @@ class Input
         $file = BASE_PATH . '/input/' . $this->type . '.php';
 
         if (!file_exists($file)) {
-            throw new Exception("Input type '$this->type' - '$file' not found");
+            throw new RuntimeException("Input type '$this->type' - '$file' not found");
         }
 
         ob_start();
@@ -46,7 +46,7 @@ class Input
 
     public function required(): self
     {
-        $this->rules['required'] = fn($v) => !empty($v) ?: 'This field is required';
+        $this->rules['required'] = fn($v) => ($v !== null && $v !== '') ? true : 'This field is required';
         return $this;
     }
 

@@ -7,7 +7,7 @@ class UserLogin extends Form
         $this->rateLimitKey = 'email';
         $this->fields = [
 			'email' => (new Input('email', 'email'))->required()->email()->max(255),
-			'password' =>  (new Input('password', 'password'))->required()->min(1)->max(255),
+			'password' =>  (new Input('password', 'password'))->required()->min(1)->max(255), // Do not give away minimum password length
 			'submit' => (new Input('submit', 'submit')),
 		];
 	}
